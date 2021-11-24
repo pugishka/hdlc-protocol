@@ -1,4 +1,3 @@
-package ift3325_tp2;
 
 public class Trame {
 	public String flag = "01111110";
