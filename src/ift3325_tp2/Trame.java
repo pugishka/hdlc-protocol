@@ -17,14 +17,41 @@ public class Trame {
 	}
 	
 
+	// concatener toutes les infos sous forme de string en binaire
 	@Override
 	public String toString() {
 		String s = this.flag;
+		for (int i=0; i<8-Integer.toBinaryString((int) this.type).length(); i++) {
+			s += "0";
+		}
 		s += Integer.toBinaryString((int) this.type);
+		for (int i=0; i<8-Integer.toBinaryString((int) ((char) (this.num+'0'))).length(); i++) {
+			s += "0";
+		}
 		s += Integer.toBinaryString((int) ((char) (this.num+'0')));
 		s += this.data;
-		s += Integer.toString(this.crc);
+		for (int i=0; i<16-Integer.toBinaryString(this.crc).length(); i++) {
+			s += "0";
+		}
+		s += Integer.toBinaryString(this.crc);
 		s += this.flag;
+		
+		return s;
+	}
+
+	
+	// Avoir un string propre à imprimer pour voir les infos d'une trame
+	public String info() {
+		String s = "1. flag : " + this.flag + "\n";
+		s +=  "2. type : \n      char : " + this.type;
+		s += "\n      int : " + (int) this.type;
+		s += "\n      binary : " + Integer.toBinaryString((int) this.type) + " (length : " + Integer.toBinaryString((int) this.type).length() + ")\n";
+		s +=  "3. num : \n      char : " + (char) (this.num+'0');
+		s += "\n      int : " + this.num;
+		s += "\n      binary of char : " + Integer.toBinaryString((int) ((char) (this.num+'0'))) + " (length : " + Integer.toBinaryString((int) ((char) (this.num+'0'))).length() + ")\n";
+		s +=  "4. data : " + this.data + "\n";
+		s +=  "5. crc : \n      binary : " + Integer.toBinaryString(this.crc) + " (length : " + Integer.toBinaryString(this.crc).length() + ")";
+		s += "\n      int : " + this.crc;
 		
 		return s;
 	}
