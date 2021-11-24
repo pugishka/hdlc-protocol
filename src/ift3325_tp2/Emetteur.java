@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Emetteur {
-
-	public int polynome = 0b10001000000100001;
+	
 	public List<String> data;
 	
 	public Emetteur(String fileDir) {
