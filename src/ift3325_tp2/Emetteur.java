@@ -30,6 +30,23 @@ public class Emetteur {
 		
 	}
 	
+	public void sendAllData(Recepteur r) {
+		
+		// trame de connexion
+		Trame trameCo = new Trame ('C', 0, "");
+		System.out.println("Demande de connexion\n");
+		String trameRecueS = r.sendTrame(trameCo.toString());
+		Trame trameRecue = new Trame (trameRecueS);
+		System.out.println("Infos de la trame reçue : \n" + trameRecue.info());
+		
+		
+		
+		/*for (String d:this.data) {
+			new Trame t = Trame(type, num, d);
+		}*/
+		
+	}
+	
 	
 	
 }

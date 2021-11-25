@@ -9,6 +9,7 @@ public class Trame {
 	public String data;
 	public int crc;
 	
+	// constructeur à partir du type, num, et data
 	public Trame(char type, int num, String data) {
 		this.type = type;
 		this.num = num;
@@ -16,24 +17,50 @@ public class Trame {
 		this.crc = calculateCRC(type, num, data);
 	}
 	
+	// constructeur à partir du résultat du toString()
+	public Trame(String trame) {
+		int indexType = this.flag.length();
+		int indexNum = indexType + 8;
+		int indexData = indexNum + 8;
+		int indexFlagEnd = trame.length()-this.flag.length();
+		int indexCRC = indexFlagEnd-16;
+		
+		this.type = (char) Integer.parseInt(trame.substring(indexType, indexNum),2);
+		this.num = Integer.parseInt(trame.substring(indexNum, indexData),2)-48;
+		this.data = trame.substring(indexData, indexCRC);
+		this.crc = Integer.parseInt(trame.substring(indexCRC, indexFlagEnd),2);
+	}
+	
 
 	// concatener toutes les infos sous forme de string en binaire
 	@Override
 	public String toString() {
+		
+		// flag
 		String s = this.flag;
+		
+		// type
 		for (int i=0; i<8-Integer.toBinaryString((int) this.type).length(); i++) {
 			s += "0";
 		}
 		s += Integer.toBinaryString((int) this.type);
+		
+		// num
 		for (int i=0; i<8-Integer.toBinaryString((int) ((char) (this.num+'0'))).length(); i++) {
 			s += "0";
 		}
 		s += Integer.toBinaryString((int) ((char) (this.num+'0')));
+		
+		// donnees
 		s += this.data;
+		
+		// crc
 		for (int i=0; i<16-Integer.toBinaryString(this.crc).length(); i++) {
 			s += "0";
 		}
 		s += Integer.toBinaryString(this.crc);
+		
+		// flag
 		s += this.flag;
 		
 		return s;
