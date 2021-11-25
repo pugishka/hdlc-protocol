@@ -27,11 +27,17 @@ public class Trame {
 		
 		this.type = (char) Integer.parseInt(trame.substring(indexType, indexNum),2);
 		this.num = Integer.parseInt(trame.substring(indexNum, indexData),2)-48;
+
+		// TODO
+		// probleme : crc parfois a une longueur de 17 bits
+		// resolution temporaire : considerer d'ignorer data si longueur calculée est 1, causée par le 1er bit
+		// d'un crc de longueur 17 au lieu de 16
 		if (trame.substring(indexData, indexCRC).length() == 1) {
 			this.data = "";
 		} else {
 			this.data = trame.substring(indexData, indexCRC);
 		}
+		//this.data = trame.substring(indexData, indexCRC);
 		this.crc = Integer.parseInt(trame.substring(indexCRC, indexFlagEnd),2);
 	}
 	
@@ -91,7 +97,19 @@ public class Trame {
 		
 		String s = this.toString();
 		String r = s.substring(0, 8) + " " + s.substring(8, 16) + " " + s.substring(16, 24) + " " ;
-		r += s.substring(24, s.length()-24) + " " ;
+		
+		// TODO
+		// probleme : crc parfois a une longueur de 17 bits
+		// resolution temporaire : considerer d'ignorer data si longueur calculée est 1, causée par le 1er bit
+		// d'un crc de longueur 17 au lieu de 16
+		
+		if (s.substring(24, s.length()-24).length() == 1) {
+			r += " " ;
+		} else {
+			r += s.substring(24, s.length()-24) + " " ;
+		}
+		
+		//r += s.substring(24, s.length()-24) + " " ;
 		r += s.substring(s.length()-24, s.length()-8) + " " + s.substring(s.length()-8, s.length());
 		
 		return r;

@@ -96,7 +96,7 @@ public class Sender {
 		
 
 		// fermeture de connexion
-		Trame trameClose = new Trame ('F', 1, "");
+		Trame trameClose = new Trame ('F', n, "");
 		System.out.println("Demande de fin de connexion\n");
 		trameRecue = sendTrame(trameClose);
 		
