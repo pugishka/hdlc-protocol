@@ -27,7 +27,11 @@ public class Trame {
 		
 		this.type = (char) Integer.parseInt(trame.substring(indexType, indexNum),2);
 		this.num = Integer.parseInt(trame.substring(indexNum, indexData),2)-48;
-		this.data = trame.substring(indexData, indexCRC);
+		if (trame.substring(indexData, indexCRC).length() == 1) {
+			this.data = "";
+		} else {
+			this.data = trame.substring(indexData, indexCRC);
+		}
 		this.crc = Integer.parseInt(trame.substring(indexCRC, indexFlagEnd),2);
 	}
 	
@@ -69,20 +73,31 @@ public class Trame {
 	
 	// Avoir un string propre à imprimer pour voir les infos d'une trame
 	public String info() {
-		String s = "1. flag : " + this.flag + "\n";
-		s +=  "2. type : \n      char : " + this.type;
-		s += "\n      int : " + (int) this.type;
+		String s =  "- type : \n      char : " + this.type;
+		//s += "\n      int : " + (int) this.type;
 		s += "\n      binary : " + Integer.toBinaryString((int) this.type) + " (length : " + Integer.toBinaryString((int) this.type).length() + ")\n";
-		s +=  "3. num : \n      char : " + (char) (this.num+'0');
-		s += "\n      int : " + this.num;
-		s += "\n      binary of char : " + Integer.toBinaryString((int) ((char) (this.num+'0'))) + " (length : " + Integer.toBinaryString((int) ((char) (this.num+'0'))).length() + ")\n";
-		s +=  "4. data : " + this.data + "\n";
-		s +=  "5. crc : \n      binary : " + Integer.toBinaryString(this.crc) + " (length : " + Integer.toBinaryString(this.crc).length() + ")";
-		s += "\n      int : " + this.crc;
+		s +=  "- num : \n      char : " + (char) (this.num+'0');
+		//s += "\n      int of char : " + this.num+'0';
+		s += "\n      binary of the char : " + Integer.toBinaryString((int) ((char) (this.num+'0'))) + " (length : " + Integer.toBinaryString((int) ((char) (this.num+'0'))).length() + ")\n";
+		s += "- data : " + this.data + "\n";
+		s += "- crc : \n      binary : " + Integer.toBinaryString(this.crc) + " (length : " + Integer.toBinaryString(this.crc).length() + ")\n";
+		s += "- trame complete : " + this.stringSeparated();
 		
 		return s;
 	}
 	
+	// Avoir un string du résultat de toString() avec des séparateurs
+	public String stringSeparated() {
+		
+		String s = this.toString();
+		String r = s.substring(0, 8) + " " + s.substring(8, 16) + " " + s.substring(16, 24) + " " ;
+		r += s.substring(24, s.length()-24) + " " ;
+		r += s.substring(s.length()-24, s.length()-8) + " " + s.substring(s.length()-8, s.length());
+		
+		return r;
+	}
+	
+	// calcul CRC
 	public int calculateCRC(char type, int num, String data) {
 		
 		String s = Integer.toBinaryString((int) type);
@@ -118,6 +133,27 @@ public class Trame {
 		}
 		
 		return Integer.parseInt(r,2);
+	}
+	
+	// methodes get
+	public String getPolynome() {
+		return this.polynome;
+	}
+	
+	public char getType() {
+		return this.type;
+	}
+	
+	public int getNum() {
+		return this.num;
+	}
+	
+	public String getData() {
+		return this.data;
+	}
+	
+	public int getCrc() {
+		return this.crc;
 	}
 	
 }
