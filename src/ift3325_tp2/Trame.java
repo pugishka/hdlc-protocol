@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Trame {
 
@@ -19,6 +20,7 @@ public class Trame {
 	
 	// constructeur à partir du résultat du toString()
 	public Trame(String trame) {
+		trame = bitStuffingRemove(trame);
 		int indexType = this.flag.length();
 		int indexNum = indexType + 8;
 		int indexData = indexNum + 8;
@@ -27,17 +29,7 @@ public class Trame {
 		
 		this.type = (char) Integer.parseInt(trame.substring(indexType, indexNum),2);
 		this.num = Integer.parseInt(trame.substring(indexNum, indexData),2)-48;
-
-		// TODO
-		// probleme : crc parfois a une longueur de 17 bits
-		// resolution temporaire : considerer d'ignorer data si longueur calculée est 1, causée par le 1er bit
-		// d'un crc de longueur 17 au lieu de 16
-		if (trame.substring(indexData, indexCRC).length() == 1) {
-			this.data = "";
-		} else {
-			this.data = trame.substring(indexData, indexCRC);
-		}
-		//this.data = trame.substring(indexData, indexCRC);
+		this.data = trame.substring(indexData, indexCRC);
 		this.crc = Integer.parseInt(trame.substring(indexCRC, indexFlagEnd),2);
 	}
 	
@@ -74,7 +66,7 @@ public class Trame {
 		s += this.flag;
 		
 		// bit stuffing
-		//s = bitStuffingAdd(s);
+		s = bitStuffingAdd(s);
 		
 		return s;
 	}
@@ -136,19 +128,7 @@ public class Trame {
 		
 		String s = this.toString();
 		String r = s.substring(0, 8) + " " + s.substring(8, 16) + " " + s.substring(16, 24) + " " ;
-		
-		// TODO
-		// probleme : crc parfois a une longueur de 17 bits
-		// resolution temporaire : considerer d'ignorer data si longueur calculée est 1, causée par le 1er bit
-		// d'un crc de longueur 17 au lieu de 16
-		
-		if (s.substring(24, s.length()-24).length() == 1) {
-			r += " " ;
-		} else {
-			r += s.substring(24, s.length()-24) + " " ;
-		}
-		
-		//r += s.substring(24, s.length()-24) + " " ;
+		r += s.substring(24, s.length()-24) + " " ;
 		r += s.substring(s.length()-24, s.length()-8) + " " + s.substring(s.length()-8, s.length());
 		
 		return r;
@@ -158,6 +138,9 @@ public class Trame {
 	public int calculateCRC(char type, int num, String data) {
 		
 		String s = Integer.toBinaryString((int) type);
+		for (int i=0; i<8-Integer.toBinaryString((int) ((char) (num+'0'))).length(); i++) {
+			s += "0";
+		}
 		s += Integer.toBinaryString((int) ((char) (num+'0')));
 		s += data;
 		s += "0000000000000000";
@@ -170,7 +153,7 @@ public class Trame {
 			reste[i] = Character.getNumericValue(s.charAt(i));
 		}
 		
-		for(int end = this.polynome.length(); end < s.length(); end++)
+		for(int end = this.polynome.length(); end < s.length(); end++) {
 			if (reste[0] == 0) {
 				for(int i=0; i<this.polynome.length()-1; i++) {
 					reste[i] = reste[i+1];
@@ -182,15 +165,16 @@ public class Trame {
 				}
 				reste[reste.length-1] = Character.getNumericValue(s.charAt(end));
 			}
-		
-		String r = "";
-		
-		for(int i=0; i<reste.length; i++) {
-			r += reste[i];
+		}
+		if (reste[0] == 1) {
+			for(int i=0; i<this.polynome.length(); i++) {
+				reste[i] = reste[i] ^ diviseur[i];
+			}
 		}
 		
-		return Integer.parseInt(r,2);
+		return Integer.parseInt(Arrays.toString(reste).replaceAll("\\[|\\]|,|\\s", ""),2);
 	}
+	
 	
 	// methodes get
 	public String getPolynome() {
