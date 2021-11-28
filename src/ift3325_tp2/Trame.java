@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 
 public class Trame {
 
@@ -73,9 +73,50 @@ public class Trame {
 		// flag
 		s += this.flag;
 		
+		// bit stuffing
+		//s = bitStuffingAdd(s);
+		
 		return s;
 	}
-
+	
+	// ajouter le bit stuffing
+	public String bitStuffingAdd(String s) {
+		String t = s.substring(8,13);
+		for (int i=13; i<s.length()-8; i++) {
+			System.out.println(i + " : " + t + "\n");
+			if (t.length() == 5) {
+				if (t.equals("11111")) {
+					s = s.substring(0,i) + "0" + s.substring(i,s.length());
+					t = "";
+				} else {
+					t = t.substring(1, 5) + s.charAt(i);
+				}
+			} else {
+				t += s.charAt(i);
+			}
+		}
+		return s;
+	}
+	
+	// enlever le bit stuffing
+	public String bitStuffingRemove(String s) {
+		String t = s.substring(8,13);
+		for (int i=13; i<s.length()-8; i++) {
+			System.out.println(i + " : " + t + "\n");
+			if (t.length() == 5) {
+				if (t.equals("11111")) {
+					s = s.substring(0,i) + s.substring(i+1,s.length());
+					t = "";
+					i--;
+				} else {
+					t = t.substring(1, 5) + s.charAt(i);
+				}
+			} else {
+				t += s.charAt(i);
+			}
+		}
+		return s;
+	}
 	
 	// Avoir un string propre à imprimer pour voir les infos d'une trame
 	public String info() {
