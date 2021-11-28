@@ -83,7 +83,6 @@ public class Trame {
 	public String bitStuffingAdd(String s) {
 		String t = s.substring(8,13);
 		for (int i=13; i<s.length()-8; i++) {
-			System.out.println(i + " : " + t + "\n");
 			if (t.length() == 5) {
 				if (t.equals("11111")) {
 					s = s.substring(0,i) + "0" + s.substring(i,s.length());
@@ -102,7 +101,6 @@ public class Trame {
 	public String bitStuffingRemove(String s) {
 		String t = s.substring(8,13);
 		for (int i=13; i<s.length()-8; i++) {
-			System.out.println(i + " : " + t + "\n");
 			if (t.length() == 5) {
 				if (t.equals("11111")) {
 					s = s.substring(0,i) + s.substring(i+1,s.length());
