@@ -7,7 +7,7 @@ import java.io.*;
 
 public class Sender {
 	
-	// liste des données du fichier
+	// liste des donnees du fichier
 	public List<String> data;
 
 	// source sockets :
@@ -23,7 +23,7 @@ public class Sender {
         this.out = new PrintWriter(socketSender.getOutputStream(), true);
         this.in = new BufferedReader(new InputStreamReader(socketSender.getInputStream()));
         
-        // envoyer data au Receiver auquel on s'est connecté
+        // envoyer data au Receiver auquel on s'est connecte
         sendAllData();
 	}
 	
@@ -35,7 +35,7 @@ public class Sender {
 		S.stopConnection();
     }
 	
-    // envoyer une trame au Receiver et retourner la trame réponse
+    // envoyer une trame au Receiver et retourner la trame reponse
     public Trame sendTrame(Trame t) throws IOException {
     	String tSend = t.toString();
     	System.out.println("Envoi de la trame par Sender : \n" + tSend + "\n\nInfos :\n" + t.info() + "\n");
@@ -53,7 +53,7 @@ public class Sender {
         socketSender.close();
     }
     
-    // lire le fichier des données
+    // lire le fichier des donnees
 	public List<String> readFile(String fileDir){
 		List<String> data = new ArrayList<String>();
 		try {

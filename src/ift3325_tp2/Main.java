@@ -10,6 +10,10 @@ public class Main {
 		// Si jamais on a besoin de test qqchose
 		// Sinon supprimer la classe avant remise
 		
+		Trame t = new Trame('I', 0, "111111111111111");
+		System.out.println(t.info() + "\n");
+		System.out.println(t.toString());
+		
 	}
 	
 }

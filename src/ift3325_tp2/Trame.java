@@ -10,7 +10,7 @@ public class Trame {
 	public String data;
 	public int crc;
 	
-	// constructeur à partir du type, num, et data
+	// constructeur a partir du type, num, et data
 	public Trame(char type, int num, String data) {
 		this.type = type;
 		this.num = num;
@@ -18,7 +18,7 @@ public class Trame {
 		this.crc = calculateCRC(type, num, data);
 	}
 	
-	// constructeur à partir du résultat du toString()
+	// constructeur a partir du resultat du toString()
 	public Trame(String trame) {
 		trame = bitStuffingRemove(trame);
 		int indexType = this.flag.length();
@@ -108,7 +108,7 @@ public class Trame {
 		return s;
 	}
 	
-	// Avoir un string propre à imprimer pour voir les infos d'une trame
+	// Avoir un string propre a imprimer pour voir les infos d'une trame
 	public String info() {
 		String s =  "- type : \n      char : " + this.type;
 		//s += "\n      int : " + (int) this.type;
@@ -118,13 +118,13 @@ public class Trame {
 		s += "\n      binary of the char : " + Integer.toBinaryString((int) ((char) (this.num+'0'))) + " (length : " + Integer.toBinaryString((int) ((char) (this.num+'0'))).length() + ")\n";
 		s += "- data : " + this.data + "\n";
 		s += "- crc : \n      binary : " + Integer.toBinaryString(this.crc) + " (length : " + Integer.toBinaryString(this.crc).length() + ")\n";
-		s += "- trame complete : " + this.stringSeparated();
+		s += "- trame complete : " + this.toString();
 		
 		return s;
 	}
 	
-	// Avoir un string du résultat de toString() avec des séparateurs
-	public String stringSeparated() {
+	// Avoir un string du resultat de toString() avec des separateurs
+	/*public String stringSeparated() {
 		
 		String s = this.toString();
 		String r = s.substring(0, 8) + " " + s.substring(8, 16) + " " + s.substring(16, 24) + " " ;
@@ -132,7 +132,7 @@ public class Trame {
 		r += s.substring(s.length()-24, s.length()-8) + " " + s.substring(s.length()-8, s.length());
 		
 		return r;
-	}
+	}*/
 	
 	// calcul CRC
 	public int calculateCRC(char type, int num, String data) {
