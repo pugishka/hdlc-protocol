@@ -42,7 +42,7 @@ public class Sender {
         out.println(tSend);
         String tReceivedS = in.readLine();
         Trame tReceivedT = new Trame(tReceivedS);
-    	System.out.println("Trame reçue par Sender : \n" + tReceivedS + "\n\nInfos :\n" + tReceivedT.info() + "\n\n\n--------------\n\n\n");
+    	System.out.println("Trame recue par Sender : \n" + tReceivedS + "\n\nInfos :\n" + tReceivedT.info() + "\n\n\n--------------\n\n\n");
     	return tReceivedT;
     }
 
