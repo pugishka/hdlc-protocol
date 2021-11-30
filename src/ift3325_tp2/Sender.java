@@ -17,21 +17,21 @@ public class Sender {
     private BufferedReader in;
     
     // constructeur
-	public Sender(String ip, int port, String fileDir) throws UnknownHostException, IOException, InterruptedException {
+	public Sender(String ip, int port, String fileDir, int gbn) throws UnknownHostException, IOException, InterruptedException {
 		this.data = readFile(fileDir);
 		this.socketSender = new Socket(ip, port);
         this.out = new PrintWriter(socketSender.getOutputStream(), true);
         this.in = new BufferedReader(new InputStreamReader(socketSender.getInputStream()));
         
         // envoyer data au Receiver auquel on s'est connecte
-        sendAllData();
+        sendAllData(gbn);
 	}
 	
 	// --------------
 	
 	// main
     public static void main(String[] args) throws NumberFormatException, UnknownHostException, IOException, InterruptedException {
-    	Sender S = new Sender(args[0], Integer.parseInt(args[1]), args[2]);
+    	Sender S = new Sender(args[0], Integer.parseInt(args[1]), args[2], Integer.parseInt(args[3]));
 		S.stopConnection();
     }
 	
@@ -73,10 +73,10 @@ public class Sender {
 	}
 	
 	// boucler sur chaque data � envoyer au Receiver
-	public void sendAllData() throws IOException, InterruptedException {
+	public void sendAllData(int gbn) throws IOException, InterruptedException {
 		
 		// trame de connexion
-		Trame trameCo = new Trame ('C', 0, "");
+		Trame trameCo = new Trame ('C', gbn, "");
 		System.out.println("Demande de connexion\n");
 		Trame trameRecue = sendTrame(trameCo);
 		
