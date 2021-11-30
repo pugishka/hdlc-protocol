@@ -13,6 +13,9 @@ public class Main {
 		Trame t = new Trame('I', 0, "111111111111111");
 		System.out.println(t.info() + "\n");
 		System.out.println(t.toString());
+
+		Trame t2 = new Trame('R', 0,"");
+		
 		
 	}
 	

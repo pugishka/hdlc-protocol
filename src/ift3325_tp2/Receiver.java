@@ -30,18 +30,23 @@ public class Receiver {
     	R.stop();
     }
 	
-    // on a reçu une trame, decider de la trame reponse à envoyer
+    // on a reï¿½u une trame, decider de la trame reponse ï¿½ envoyer
 	public void sendResponse(String trameS) throws IOException {
     	
-		// TODO
-		// gestion d'erreurs
+        
     	Trame trame = new Trame(trameS);
     	
-    	System.out.println("Trame reçue par Receiver : \n" + trameS + "\n\nInfos :\n" + trame.info() + "\n");
+    	System.out.println("Trame recue par Receiver : \n" + trameS + "\n\nInfos :\n" + trame.info() + "\n");
     	
     	if ( trame.getType() == 'I' || trame.getType() == 'C' ||trame.getType() == 'F') {
-    		sendTrame(new Trame('A', trame.getNum(), ""));
+            if(trame.calculerErreur()){
+                sendTrame(new Trame('R', trame.getNum(), ""));
+            }else{
+                sendTrame(new Trame('A', trame.getNum(), ""));
+            }
+    		//sendTrame(new Trame('A', trame.getNum(), ""));
     	}
+        
 	}
 
 	// envoyer la trame t

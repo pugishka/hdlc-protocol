@@ -17,7 +17,7 @@ public class Sender {
     private BufferedReader in;
     
     // constructeur
-	public Sender(String ip, int port, String fileDir) throws UnknownHostException, IOException {
+	public Sender(String ip, int port, String fileDir) throws UnknownHostException, IOException, InterruptedException {
 		this.data = readFile(fileDir);
 		this.socketSender = new Socket(ip, port);
         this.out = new PrintWriter(socketSender.getOutputStream(), true);
@@ -30,7 +30,7 @@ public class Sender {
 	// --------------
 	
 	// main
-    public static void main(String[] args) throws NumberFormatException, UnknownHostException, IOException {
+    public static void main(String[] args) throws NumberFormatException, UnknownHostException, IOException, InterruptedException {
     	Sender S = new Sender(args[0], Integer.parseInt(args[1]), args[2]);
 		S.stopConnection();
     }
@@ -42,7 +42,7 @@ public class Sender {
         out.println(tSend);
         String tReceivedS = in.readLine();
         Trame tReceivedT = new Trame(tReceivedS);
-    	System.out.println("Trame reçue par Sender : \n" + tReceivedS + "\n\nInfos :\n" + tReceivedT.info() + "\n\n\n--------------\n\n\n");
+    	System.out.println("Trame reï¿½ue par Sender : \n" + tReceivedS + "\n\nInfos :\n" + tReceivedT.info() + "\n\n\n--------------\n\n\n");
     	return tReceivedT;
     }
 
@@ -72,8 +72,8 @@ public class Sender {
 		
 	}
 	
-	// boucler sur chaque data à envoyer au Receiver
-	public void sendAllData() throws IOException {
+	// boucler sur chaque data ï¿½ envoyer au Receiver
+	public void sendAllData() throws IOException, InterruptedException {
 		
 		// trame de connexion
 		Trame trameCo = new Trame ('C', 0, "");
@@ -81,16 +81,21 @@ public class Sender {
 		Trame trameRecue = sendTrame(trameCo);
 		
 		if (trameRecue.getType() == 'A') {
-			System.out.println("Connexion autorisée\n");
+			System.out.println("Connexion autorise\n");
 		}
 		
-		// TODO
 		// gestion d'erreurs
 		int n = 1;
 		for (String d:this.data) {
 			Trame t = new Trame('I', n, d);
-			n++;
+		
 			Trame tRecue = sendTrame(t);
+			while(tRecue.getType() == 'R' ){
+				tRecue = sendTrame(t);
+				System.out.println("Trame erronee\n");
+				Thread.sleep(3000);
+			}
+			n++;
 			System.out.println("Trame suivante\n");
 		}
 		
@@ -101,7 +106,7 @@ public class Sender {
 		trameRecue = sendTrame(trameClose);
 		
 		if (trameRecue.getType() == 'A') {
-			System.out.println("Connexion terminée\n");
+			System.out.println("Connexion terminee\n");
 		}
 		
 	}

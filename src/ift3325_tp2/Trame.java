@@ -133,7 +133,71 @@ public class Trame {
 		
 		return r;
 	}*/
-	
+	public boolean calculerErreur(){
+		int crc = this.crc;
+		boolean rest = false;
+
+		String s = Integer.toBinaryString((int) type);
+		for (int i=0; i<8-Integer.toBinaryString((int) ((char) (num+'0'))).length(); i++) {
+			s += "0";
+		}
+		s += Integer.toBinaryString((int) ((char) (num+'0')));
+		s += data;
+		//s += "0000000000000000";
+		String s2 = "";
+		
+		//s = Integer.toBinaryString(Integer.parseInt(s) + crc);
+		
+
+		// crc
+		for (int i=0; i<16-Integer.toBinaryString(this.crc).length(); i++) {
+			s2 += "0";
+		}
+		s2 += Integer.toBinaryString(this.crc);
+		s += s2;
+		
+		
+		//if()
+		
+		int[] reste = new int[this.polynome.length()];
+		int[] diviseur = new int[this.polynome.length()];
+		
+		for(int i=0; i<this.polynome.length(); i++) {
+			diviseur[i] = Character.getNumericValue(this.polynome.charAt(i));
+			reste[i] = Character.getNumericValue(s.charAt(i));
+		}
+		
+		for(int end = this.polynome.length(); end < s.length(); end++) {
+			if (reste[0] == 0) {
+				for(int i=0; i<this.polynome.length()-1; i++) {
+					reste[i] = reste[i+1];
+				}
+				reste[reste.length-1] = Character.getNumericValue(s.charAt(end));
+			} else {
+				for(int i=0; i<this.polynome.length()-1; i++) {
+					reste[i] = reste[i+1] ^ diviseur[i+1];
+				}
+				reste[reste.length-1] = Character.getNumericValue(s.charAt(end));
+			}
+		}
+		if (reste[0] == 1) {
+			for(int i=0; i<this.polynome.length(); i++) {
+				reste[i] = reste[i] ^ diviseur[i];
+			}
+		}
+		
+		int Sum_reste = 0;
+		for(int i=0; i<reste.length;i++){
+			Sum_reste += reste[i];
+		}
+
+		if(Sum_reste != 0){
+			rest=true;
+		}
+
+		return (rest);
+	}
+
 	// calcul CRC
 	public int calculateCRC(char type, int num, String data) {
 		
