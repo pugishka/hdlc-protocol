@@ -30,7 +30,7 @@ public class Receiver {
     	R.stop();
     }
 	
-    // on a re�u une trame, decider de la trame reponse � envoyer
+    // on a recu une trame, decider de la trame reponse a envoyer
 	public void sendResponse(String trameS) throws IOException {
     	
         
