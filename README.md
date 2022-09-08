@@ -13,3 +13,4 @@ Pour tester le code sur windows :
   - va se connecter au même #port
 
 Ensuite seront affichées les trames échangées par Receiver et Sender dans leur fenêtres cmd respectives.
+# hdlc-protocol
